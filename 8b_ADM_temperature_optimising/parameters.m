@@ -79,10 +79,10 @@ diffCoefH2  = 17.2*10^-9; % m^2/s diffusion coefficient of H2 in FT liquid  Kris
 
 %% operating conditions
 pTot            =  30*10^5;  % Pa       total pressure
-tempCelsiusInit =  240;  % Celsius   Reactor temperature    Satterfield(1991), table V 
-supVelGasInit   =  0.2;  % m/s 	  gas phase superficial velocity Krishna (1999)
+tempCelsiusInit =  220;  % Celsius   Reactor temperature    Satterfield(1991), table V 
+supVelGasInit   =  0.26;  % m/s 	  gas phase superficial velocity Krishna (1999)
 supVelLiqInit   =  0.01;  % m/s       liquid phase superficial velocity
-volFracSol      =  0.3; % kg/kg     volume fraction of solids in reactor Krishna(2001), page 245 
+volFracSol      =  0.35; % kg/kg     volume fraction of solids in reactor Krishna(2001), page 245 
 volFracGas      =  0.2;  % kg/kg     volume fraction of gas in reactor (see figure 4, Krishna 1999)
 volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in reactor
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
@@ -129,8 +129,8 @@ heatCapSol = 992;   % J/(kg K)% heat capacity of solid      MarettoKrishna1999
 heatCapGas = 3000;  % J/(kg K)% heat capacity of methane (TO FIX!)
 
 %% heat transfer parameters
-hL = 5; % GUESSWORK
-hW = 1400;  % GUESSWORK
+hL = 0.05; % GUESSWORK
+hW = 1500;  % GUESSWORK
 
 %% reactor cooling system
 diaTub          = 0.114;    % m outer diameter of cooling tube

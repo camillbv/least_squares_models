@@ -20,8 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 4;
-
+P = 40;
 disp('low number of points - can be increased.')
 N = P+1;
 nVar = (3+nLumps)*2 + 2 + 2;
@@ -41,7 +40,7 @@ y0 = [wtFracGasInit' wtFracLiqInit' supVelGasInit supVelLiqInit tempGasInit temp
 [zODE,yODE] = ode15s('model_equations',COLUMN,y0);
 
 %% use ODE estimate as initial guess
-solVec = reshape(yODE,N,nVar);
+solVec = reshape(yODE,N,nVar)
 
 %% boundary conditions
 BC = y0';
@@ -49,7 +48,7 @@ BC = y0';
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 10;
+max_iter            = 20;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -112,8 +111,10 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         liqDensity = liqDensityInit; % constant density
                
         %% kinetic constants. taken from Sehabiague (2013a). To verify.
-        aS = 2.592e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
+        aS = 7e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
         bS = 1.243e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
+        %aS = 2.592e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
+        %bS = 1.243e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
         
         parStructReactRate = struct('aS',aS,'bS',bS,'equiConst',equiConst, ...
             'molFracLiq',molFracLiq,'pTot',pTot);
@@ -380,8 +381,14 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     f_newGAS = f(N+1:2*N);
     f_newSLU = f(3*N+1:4*N);
     
-    eig(A)
-    pause
+    %% plot the intermediate results
+    figure(100)
+    subplot(2,1,1)
+    plot(COLUMN,f_newGAS)
+    hold on
+    subplot(2,1,2)
+    plot(COLUMN,f_newSLU)
+    hold on
     
     %% pick up old values
     f_oldGAS = tempGas;
