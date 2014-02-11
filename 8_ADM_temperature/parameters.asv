@@ -88,7 +88,7 @@ volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in rea
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
 
 %% area density
-sauterDiameter  = 7*10^-3; % m Sauter Mean Diameter (DeckwerLoisiZaidiRalek1980) TO IMPROVE
+sauterDiameter  = 0.7*10^-3; % m Sauter Mean Diameter (DeckwerLoisiZaidiRalek1980) TO IMPROVE
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
@@ -99,8 +99,7 @@ dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;
 %% thermal conductivities
 einsteinK = 4.5;        % Meisl (1967)
 viscLiq   = 1.05*1e-3;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530 K
-condLiq   = 0.113; % W/(mK), Maretto Krishna 1999, table 1
-condSol   =   1.7; % W/(mK), Maretto Krishna 1999, table 1
+
 
 %% mass transfer coefficients
 kLaCO =  volFracGas*0.5*sqrt(diffCoefCO/diffCoefRef); % 1/s volumetric mass transfer coefficient of CO Krishna (1999), page 284 
@@ -134,15 +133,15 @@ heatCapSol = 992;   % J/(kg K)% heat capacity of solid      MarettoKrishna1999
 heatCapGas = 3000;  % J/(kg K)% heat capacity of methane (TO FIX!)
 
 %% heat transfer parameters
-hL =   60; % GUESSWORK
-hW = 6000;  % GUESSWORK
+hL = 5; % GUESSWORK
+hW = 1400;  % GUESSWORK
 
 %% reactor cooling system
 diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 470;      % K cooling water temperature
+tempSurr        = 300;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 0.3;   

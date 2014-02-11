@@ -2,10 +2,8 @@
 %% calculate the reaction rate in each spatial point
 function reactRate = get_reactRate(par)
     %% unpack variables
-    factor_a    = par.factor_a;
-    factor_b    = par.factor_b;
-    a           = par.a;
-    b           = par.b;
+    aS          = par.aS;
+    bS          = par.bS;
     equiConst   = par.equiConst;
     molFracLiq  = par.molFracLiq;
     pTot        = par.pTot;
@@ -17,12 +15,9 @@ function reactRate = get_reactRate(par)
     
     %% perform calculations
     reactRate = zeros(N,1);
-    for zPoint = 1:N
-      %  if molFracLiqCO(zPoint) > 0.001
-            reactRate(zPoint) = max(factor_a*(a*equiConst(1)*molFracLiqCO(zPoint)*equiConst(2)*molFracLiqH2(zPoint)*pTot^2 )/...
-                ((1+b*factor_b*equiConst(1)*molFracLiqCO(zPoint)*pTot)^2),0);
-      %  else reactRate(zPoint)=0;
-      %  end
+    for zP = 1:N
+            reactRate(zP) = max((aS(zP)*equiConst(1)*molFracLiqCO(zP)*equiConst(2)*molFracLiqH2(zP)*pTot^2 )/...
+                ((1+bS(zP)*equiConst(1)*molFracLiqCO(zP)*pTot)^2),0);
     end
  
 end
