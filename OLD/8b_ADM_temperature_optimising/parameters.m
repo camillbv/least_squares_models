@@ -129,7 +129,7 @@ heatCapSol = 992;   % J/(kg K)% heat capacity of solid      MarettoKrishna1999
 heatCapGas = 3000;  % J/(kg K)% heat capacity of methane (TO FIX!)
 
 %% heat transfer parameters
-hL = 0.05; % GUESSWORK
+hL = 0.005; % GUESSWORK
 hW = 1500;  % GUESSWORK
 
 %% reactor cooling system
@@ -137,20 +137,20 @@ diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 300;      % K cooling water temperature
+tempSurr        = 400;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 0.3;   
 molFracGasH2Init    = 0.7; 
 molFracGasH2OInit   = 0.01;     
-molFracGasAlkInit   = zeros(nLumps,1)';
+molFracGasAlkInit   = 1e-10*ones(nLumps,1)';
 molFracGasInit      = [molFracGasCOInit molFracGasH2Init molFracGasH2OInit molFracGasAlkInit]';
 molFracGasInit      = molFracGasInit./sum(molFracGasInit);  % scale it to sum to 1
 
 %% inlet liquid phase concentrations
 molFracLiqCOInit    = 0.01;
 molFracLiqH2Init    = 0.01;
-molFracLiqH2OInit   = 0;
+molFracLiqH2OInit   = 0.01;
 molFracLiqAlkInit   = 1e-10*ones(nLumps,1); 
 molFracLiqAlkInit(nLumps) = 0.5; 
 molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit']';     % add water

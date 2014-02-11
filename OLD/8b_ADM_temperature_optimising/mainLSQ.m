@@ -20,8 +20,8 @@ format long
 parameters
 
 %% set numerical parameters
-P = 40;
-disp('low number of points - can be increased.')
+P = 4;
+
 N = P+1;
 nVar = (3+nLumps)*2 + 2 + 2;
 
@@ -40,7 +40,7 @@ y0 = [wtFracGasInit' wtFracLiqInit' supVelGasInit supVelLiqInit tempGasInit temp
 [zODE,yODE] = ode15s('model_equations',COLUMN,y0);
 
 %% use ODE estimate as initial guess
-solVec = reshape(yODE,N,nVar)
+solVec = reshape(yODE,N,nVar);
 
 %% boundary conditions
 BC = y0';
@@ -48,7 +48,7 @@ BC = y0';
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 20;
+max_iter            = 50;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -111,10 +111,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         liqDensity = liqDensityInit; % constant density
                
         %% kinetic constants. taken from Sehabiague (2013a). To verify.
-        aS = 7e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
+        aS = 2.592e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
         bS = 1.243e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
-        %aS = 2.592e-12*exp(-37.4*1000/(gasConst/1000)./tempSlu);
-        %bS = 1.243e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
         
         parStructReactRate = struct('aS',aS,'bS',bS,'equiConst',equiConst, ...
             'molFracLiq',molFracLiq,'pTot',pTot);
@@ -151,8 +149,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             L14 = -kLa(cNo)*liqDensity/equiConst(cNo)*diag(avMolMassGas./avMolMassLiq);
             L15 = D;
             L16 = liqDensity*diag(supVelLiq)*D + ...
-                liqDensity*diag(D*supVelLiq) + ...
-                kLa(cNo)*liqDensity*diag(ones(N,1));
+                  liqDensity*diag(D*supVelLiq) + ...
+                  kLa(cNo)*liqDensity*diag(ones(N,1));
             
             L =   [L1 L2 L3 L4; L5 L6 L7 L8; L9 L10 L11 L12; L13 L14 L15 L16];
             
@@ -172,20 +170,20 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             
             %% B
             B1  = zeros(N,N);
-            B2  = zeros(N,N); B2(1,1) = 1; % gas weight fraction of CO set at inlet
+            B2  = zeros(N,N); B2(1,1) = 1; % gas weight fraction set at inlet
             B3  = zeros(N,N);
             B4  = zeros(N,N);
-            B5  = zeros(N,N); B5(N,N) = 1; % gas flux of CO set at outlet
+            B5  = zeros(N,N); B5(N,N) = 1; % gas flux set at outlet
             B6  = zeros(N,N);
             B7  = zeros(N,N);
             B8  = zeros(N,N);
             B9  = zeros(N,N);
             B10 = zeros(N,N);
             B11 = zeros(N,N);
-            B12 = zeros(N,N); B12(1,1) = 1; % liquid weight fraction of CO set at inlet
+            B12 = zeros(N,N); B12(1,1) = 1; % liquid weight fraction set at inlet
             B13 = zeros(N,N);
             B14 = zeros(N,N);
-            B15 = zeros(N,N); B15(N,N) = 1; % liquid flux of CO set at outlet
+            B15 = zeros(N,N); B15(N,N) = 1; % liquid flux set at outlet
             B16 = zeros(N,N);
             B = [B1 B2 B3 B4; B5 B6 B7 B8; B9 B10 B11 B12; B13 B14 B15 B16];
             
@@ -204,13 +202,13 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             f_oldLIQ = wtFracLiq(:,cNo);
         
             %% underrelaxation
-            underrelaxation = 0.5;
+            underrelaxation = 0.05;
             
             %% pick out weight fractions and fluxes
             GASFLUX = f_ADM(1:N);
-            GASWTFR = max(f_ADM(N+1:2*N),0)*underrelaxation + f_oldGAS*(1-underrelaxation)  ;
+            GASWTFR = max(f_ADM(N+1:2*N),0)*underrelaxation + f_oldGAS*(1-underrelaxation);
             LIQFLUX = f_ADM(2*N+1:3*N);
-            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation)  ;
+            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation);
             
             %% store new values in appropriate matrix
             wtFracGasADM(:,cNo) = GASWTFR;
@@ -279,7 +277,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     f_oldLIQ = supVelLiq;
     
     %% underrelaxation
-    underrelaxation = 0.5;
+    underrelaxation = 0.15;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
     
@@ -339,7 +337,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     %% g
     g = zeros(4*N,1);
     g(3*N+1:4*N) = volFracLiq*(-deltaHr)*reactRate*catDensity/sluDensityInit/heatCapSluInit./supVelSlu + ...
-                   tempSurr*hW*perimeter/area/sluDensityInit/heatCapSluInit./supVelSlu;
+                   1e-5*tempSurr*hW*perimeter/area/sluDensityInit/heatCapSluInit./supVelSlu;
     
     %% W
     W = diag([wCOLUMN; wCOLUMN; wCOLUMN; wCOLUMN]);
@@ -385,9 +383,11 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     figure(100)
     subplot(2,1,1)
     plot(COLUMN,f_newGAS)
+    ylabel('gas temperature')
     hold on
     subplot(2,1,2)
     plot(COLUMN,f_newSLU)
+    ylabel('liquid temperature')
     hold on
     
     %% pick up old values
@@ -395,13 +395,14 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     f_oldSLU = tempSlu;
     
     %% underrelaxation
-    underrelaxation = 0.5;
+    underrelaxation = 0.05;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_SLU = f_newSLU*underrelaxation + f_oldSLU*(1-underrelaxation);
     
     %% update solution vector
     solVec(:,nCompGas+nCompLiq+3) = f_GAS;
     solVec(:,nCompGas+nCompLiq+4) = f_SLU;
+   % pause
     
     %%
     
