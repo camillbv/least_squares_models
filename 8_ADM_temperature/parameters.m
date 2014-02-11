@@ -100,6 +100,7 @@ dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;
 
 %% thermal conductivities
 einsteinK = 4.5;        % Meisl (1967)
+%viscLiq = 2.9e-4; % Maretto Krishna 1999, table 1;
 viscLiq   = 1.05*1e-3;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530 K
 condLiq   = 0.113; % W/(mK), Maretto Krishna 1999, table 1
 condSol   =   1.7; % W/(mK), Maretto Krishna 1999, table 1
@@ -143,7 +144,7 @@ diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 300;      % K cooling water temperature
+tempSurr        = 283;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 0.3;   

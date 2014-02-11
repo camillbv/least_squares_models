@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 4;
+P = 30;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -49,7 +49,7 @@ BC = y0';
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 10;
+max_iter            = 50;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -120,6 +120,18 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         
         reactRate    = get_reactRate(parStructReactRate);
         
+        %% mass transfer parameters
+        sluDensity  = sluDensityInit;
+        heatCapSlu  = heatCapSluInit;
+        viscSlu = viscLiq*(1+einsteinK*volFracSol);
+        
+        parStructkL = struct('liqDensity',liqDensity,'gasDensity',gasDensity, ...
+            'diffCoefCO',diffCoefCO,'viscLiq',viscLiq,'graConst',graConst);
+        
+        
+        
+        kL = getMassTransCoeff(parStructkL);
+                
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
             %% L
@@ -135,7 +147,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             L6 = diag(supVelGas)*diag(D*gasDensity) + ...
                 diag(gasDensity)*diag(supVelGas)*D + ...
                 diag(gasDensity)*diag(D*supVelGas) + ...
-                kLa(cNo)*liqDensity/equiConst(cNo)*diag(avMolMassGas./avMolMassLiq);
+                kL*a(cNo)*liqDensity/equiConst(cNo)*diag(avMolMassGas./avMolMassLiq);
             L7 = zeros(N,N);
             L8 = -kLa(cNo)*liqDensity*diag(ones(N,1)); %% !! DIGER!
             
@@ -298,24 +310,20 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     supVelLiq   = solVec(:,nCompGas+nCompLiq+2);
     tempGas     = solVec(:,nCompGas+nCompLiq+3);
     tempSlu     = solVec(:,nCompGas+nCompLiq+4);
-    
-   
-    
+          
     %% heat dispersion parameters
     supVelSlu   = supVelLiq;
-    sluDensity  = sluDensityInit;
-    heatCapSlu  = heatCapSluInit;
-    
+   
     lambdaGAS   = dispCoefGas.*gasDensity.*heatCapGas;
     lambdaLIQ   = dispCoefLiq.*sluDensityInit.*heatCapSluInit;
     
     parStructhW = struct('condLiq',condLiq,'condSol',condSol, ...
         'volFracSol',volFracSol,'viscLiq',viscLiq,'graConst',graConst, ...
         'supVelGas',supVelGas,'sluDensity',sluDensity, ...
-        '')
+        'einsteinK',einsteinK,'heatCapSlu',heatCapSlu);
     
-    hW = 
-    
+    hW = getWallHeatCoeff(parStructhW);
+
     %% L
     
     % flux equation gas

@@ -120,6 +120,18 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         
         reactRate    = get_reactRate(parStructReactRate);
         
+        %% mass transfer parameters
+        sluDensity  = sluDensityInit;
+        heatCapSlu  = heatCapSluInit;
+        viscSlu = viscLiq*(1+einsteinK*volFracSol);
+        
+        parStructkL = struct('liqDensity',liqDensity,'gasDensity',gasDensity, ...
+            'diffCoefCO',diffCoefCO,'viscLiq',viscLiq,'graConst',graConst);
+        
+        
+        
+    %    kL = getMassTransCoeff(parStructkL);
+                
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
             %% L
@@ -298,14 +310,10 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     supVelLiq   = solVec(:,nCompGas+nCompLiq+2);
     tempGas     = solVec(:,nCompGas+nCompLiq+3);
     tempSlu     = solVec(:,nCompGas+nCompLiq+4);
-    
-   
-    
+          
     %% heat dispersion parameters
     supVelSlu   = supVelLiq;
-    sluDensity  = sluDensityInit;
-    heatCapSlu  = heatCapSluInit;
-    
+   
     lambdaGAS   = dispCoefGas.*gasDensity.*heatCapGas;
     lambdaLIQ   = dispCoefLiq.*sluDensityInit.*heatCapSluInit;
     
@@ -315,7 +323,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         'einsteinK',einsteinK,'heatCapSlu',heatCapSlu);
     
     hW = getWallHeatCoeff(parStructhW);
-    %hW = 6000;
+
     %% L
     
     % flux equation gas

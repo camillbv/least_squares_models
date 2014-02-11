@@ -63,7 +63,6 @@ parStructhW = struct('condLiq',condLiq,'condSol',condSol, ...
     'einsteinK',einsteinK,'heatCapSlu',heatCapSlu);
 
 hW = getWallHeatCoeff(parStructhW);
-%hW = 6000;
 
 heatRemovalThroughCoolingTubes = hW*perimeter/area/(sluDensityInit*heatCapSluInit*supVelSlu)*(tempSurr-tempSlu);
 heatTransLiqToGas = hL*areaDensity/(sluDensityInit*heatCapSluInit*supVelSlu)*(tempGas-tempSlu);
