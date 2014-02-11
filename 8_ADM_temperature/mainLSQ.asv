@@ -111,19 +111,14 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         gasDensity = get_gasDensity(parStructGasDensity);
         liqDensity = liqDensityInit; % constant density
                
-        %% kinetic constants.
-        %aS = 0.4*7.93e-12*exp(-37.3*1000/(gasConst/1000)./tempSlu);
+        %% kinetic constants
         aS = 2.592e-12*exp(-37.3*1000/(gasConst/1000)./tempSlu);
         bS = 1.23e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
         
         parStructReactRate = struct('aS',aS,'bS',bS,'equiConst',equiConst, ...
             'molFracLiq',molFracLiq,'pTot',pTot);
         
-        %reactRate    = get_reactRate(parStructReactRate);
-        parStructReactRateConstantParameters = str b,'equiConst',equiConst, ...
-            'molFracLiq',molFracLiq,'pTot',pTot);
-        
-        reactRate = get_reactRateConstantParameters(parStructReactRateConstantParameters);
+        reactRate    = get_reactRate(parStructReactRate);
         
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
@@ -314,7 +309,12 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     lambdaGAS   = dispCoefGas.*gasDensity.*heatCapGas;
     lambdaLIQ   = dispCoefLiq.*sluDensityInit.*heatCapSluInit;
     
+    parStructhW = struct('condLiq',condLiq,'condSol',condSol, ...
+        'volFracSol',volFracSol,'viscLiq',viscLiq,'graConst',graConst, ...
+        'supVelGas',supVelGas,'sluDensity',sluDensity, ...
+        '')
     
+    hW = 
     
     %% L
     

@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 4;
+P = 30;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -49,7 +49,7 @@ BC = y0';
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 10;
+max_iter            = 50;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -308,8 +308,14 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     
     lambdaGAS   = dispCoefGas.*gasDensity.*heatCapGas;
     lambdaLIQ   = dispCoefLiq.*sluDensityInit.*heatCapSluInit;
-      
     
+    parStructhW = struct('condLiq',condLiq,'condSol',condSol, ...
+        'volFracSol',volFracSol,'viscLiq',viscLiq,'graConst',graConst, ...
+        'supVelGas',supVelGas,'sluDensity',sluDensity, ...
+        'einsteinK',einsteinK,'heatCapSlu',heatCapSlu);
+    
+    hW = getWallHeatCoeff(parStructhW);
+    %hW = 6000;
     %% L
     
     % flux equation gas

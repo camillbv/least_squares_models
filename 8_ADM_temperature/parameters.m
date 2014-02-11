@@ -6,12 +6,13 @@
 
 %% global variables
 
-global a b tempGasInit tempSluInit nu Mw catDensity tempSur...
-       volFracSol volFracGas volFracLiq hL hW heatCapGas perimeter...
+global a b tempGasInit tempSluInit nu Mw catDensity ...
+       volFracSol volFracGas volFracLiq hL heatCapGas perimeter...
        gasConst supVelGasInit supVelLiqInit pTot factor_a factor_b ...
        kLa equiConst nLumps liqDensityInit dispCoefGas dispCoefLiq ...
        nComp deltaHr areaDensity heatCapSluInit sluDensityInit area ...
-       volFracSlu tempSurr
+       volFracSlu tempSurr graConst ...
+       condLiq condSol viscLiq einsteinK
 
 %           value     unit        description         source
 %% kinetic parameters
@@ -63,6 +64,7 @@ Mw  = [molWtCO   molWtH2   molWtH2O   molWtAlkanes']'; % kg/kmol  col. vector of
 
 %% universal gas constant
 gasConst        = 8.314*10^3;  % J/(K kmol) gas constant         SI Chemical Data, page 3
+graConst        = 9.81;        % m/s^2      standard acceleration of gravity
 
 %% k_i values; k_i = y_i/x_i
 K = importdata('utregning_ki_3000_kPa.txt','\t',0); % import text file written from Excel sheet
@@ -134,15 +136,14 @@ heatCapSol = 992;   % J/(kg K)% heat capacity of solid      MarettoKrishna1999
 heatCapGas = 3000;  % J/(kg K)% heat capacity of methane (TO FIX!)
 
 %% heat transfer parameters
-hL =   60; % GUESSWORK
-hW = 6000;  % GUESSWORK
+hL =   6; % GUESSWORK
 
 %% reactor cooling system
 diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 470;      % K cooling water temperature
+tempSurr        = 300;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 0.3;   

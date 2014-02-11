@@ -12,15 +12,15 @@ function hW = getWallHeatCoeff(par)
     heatCapSlu  = par.heatCapSlu;
     
     %% calculate slurry viscosity
-    viscSlu = viscLiq*(1+einsteinK*volFracSol)
+    viscSlu = viscLiq*(1+einsteinK*volFracSol);
     
     %% calculate thermal conductivity
     condSlu = condLiq* ...
              (2*condLiq+condSol-2*volFracSol*(condLiq-condSol))/ ...
-             (  condLiq+condSol-  volFracSol*(condLiq-condSol))
+             (  condLiq+condSol-  volFracSol*(condLiq-condSol));
          
     %% calculate hW
-    hW = 0.1*(condSlu^0.5*sluDensity^0.75*heatCapSlu^0.5* ...
-              viscSlu^(-0.25)*graConst^0.25*supVelGas^0.25)
+    hW = 0.1*(condSlu.^0.5*sluDensity.^0.75*heatCapSlu.^0.5.* ...
+              viscSlu.^(-0.25).*graConst.^0.25.*supVelGas.^0.25);
          
 end

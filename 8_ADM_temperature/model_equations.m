@@ -9,8 +9,9 @@ global factor_a factor_b a b gasConst ...
         nCompGas nCompLiq kLa Mw ...
         liqDensityInit nu catDensity equiConst ...
         heatCapGas heatCapSluInit perimeter area ...
-        hL hW areaDensity sluDensityInit tempSurr ...
-        deltaHr pTot volFracLiq
+        hL areaDensity sluDensityInit tempSurr ...
+        deltaHr pTot graConst condLiq ...
+        condSol volFracSol volFracLiq viscLiq einsteinK
 
 %% unpack 
 wtFracGas    = y(1:nCompGas);                   % gas weight fractions
@@ -21,6 +22,8 @@ tempGas      = y(nCompGas+nCompLiq + 3);        % gas temperature
 tempSlu      = y(nCompGas+nCompLiq + 4);        % slurry temperature
 
 supVelSlu=supVelLiq;
+sluDensity = sluDensityInit;
+heatCapSlu = heatCapSluInit;
 
 %% wtFrac -> molFrac
 molFracGas = wtFracGas./Mw/(sum(wtFracGas./Mw)); 
@@ -54,6 +57,13 @@ SUMJd               = sum(d_wtFracGas_dz./Mw);
 d_avMolMassGas_dz   = 1./(SUMJ.^2)*sum((d_wtFracGas_dz.*SUMJ - wtFracGas.*SUMJd));
 
 %% d_temp_dz
+parStructhW = struct('condLiq',condLiq,'condSol',condSol, ...
+    'volFracSol',volFracSol,'viscLiq',viscLiq,'graConst',graConst, ...
+    'supVelGas',supVelGas,'sluDensity',sluDensity, ...
+    'einsteinK',einsteinK,'heatCapSlu',heatCapSlu);
+
+hW = getWallHeatCoeff(parStructhW);
+%hW = 6000;
 
 heatRemovalThroughCoolingTubes = hW*perimeter/area/(sluDensityInit*heatCapSluInit*supVelSlu)*(tempSurr-tempSlu);
 heatTransLiqToGas = hL*areaDensity/(sluDensityInit*heatCapSluInit*supVelSlu)*(tempGas-tempSlu);
