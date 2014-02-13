@@ -102,7 +102,7 @@ volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in rea
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
 
 %% area density
-sauterDiameter  = 7*10^-3; % m Sauter Mean Diameter (DeckwerLoisiZaidiRalek1980) TO IMPROVE
+sauterDiameter  = 70*10^-3; % m Sauter Mean Diameter (DeckwerLoisiZaidiRalek1980) TO IMPROVE
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
@@ -112,7 +112,6 @@ dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;
 
 %% thermal conductivities
 einsteinK = 4.5;        % Meisl (1967)
-%viscLiq = 2.9e-4; % Maretto Krishna 1999, table 1;
 viscLiq   = 1.05*1e-3;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530 K
 condLiq   = 0.113; % W/(mK), Maretto Krishna 1999, table 1
 condSol   =   1.7; % W/(mK), Maretto Krishna 1999, table 1
