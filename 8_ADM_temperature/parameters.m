@@ -12,7 +12,7 @@ global a b tempGasInit tempSluInit nu Mw catDensity ...
        kLa equiConst nLumps liqDensityInit dispCoefGas dispCoefLiq ...
        nComp deltaHr areaDensity heatCapSluInit sluDensityInit area ...
        volFracSlu tempSurr graConst ...
-       condLiq condSol viscLiq einsteinK
+       condLiq condSol viscLiq einsteinK 
 
 %           value     unit        description         source
 %% kinetic parameters
@@ -28,7 +28,7 @@ factor_b = 10^-6;
 %% physical properties
 molWtCO     =  28.0;  % kg/kmol  molar weight CO      SI Chemical Data, page 32
 molWtH2     =   2.0;  % kg/kmol  molar weight H2      SI Chemical Data, page 40
-molWtH2O    =  18.0;  % kg/kmol  molar weight H2      SI Chemical Data, page 42
+molWtH2O    =  18.0;  % kg/kmol  molar weight H2O     SI Chemical Data, page 42
 Z_CO        =  12.0;  % kg/kmol  atomic weight of carbon
 Z_H         =   1.0;  % kg/kmol  atomic weight of hydrogen
 
@@ -78,6 +78,18 @@ diffCoefRef = 2*10^-9; % m^2/s reference diffusion coefficient in FT liquid Kris
 diffCoefCO  = 45.5*10^-9; % m^2/s diffusion coefficient of CO in FT liquid  Krishna (1999), page 284
 diffCoefH2  = 17.2*10^-9; % m^2/s diffusion coefficient of H2 in FT liquid  Krishna (1999), page 284
 
+%% diffusion / mass transfer parameters
+% components: [CO H2 H2O C1-C10 C11-C20 C21-C30 C31+]
+% repr. comp: [CO H2 H2O C5     C14     C24     C28*] (This is the component
+% on which the liquid properties are estimated)
+molecularDia = [3.72 2.92 2.7 5.850 7.81 9.25 9.76]'; % Å
+Nparameter   = 0.605; % backwards-calculation from eq 7, ErkeyRoddenAkgerman1990, CO in octacosane
+% sources: CO, H2, C5: Bird, Stewart, Lightfoot (2nd ed), page 854 
+%          C14, C24, C28: Erkey, Rodden, Akgerman (1990), table 2. 
+%          Data for C24 extrapolated between C20 and C28.
+%          H2O: Schatzberg (1967)
+mWoctacosane = 394.8; % molecular weight of octacosane
+mDoctacosane = 9.76;  % molecular diameter of octacosane
 
 %% operating conditions
 pTot            =  30*10^5;  % Pa       total pressure
@@ -144,7 +156,7 @@ diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 283;      % K cooling water temperature
+tempSurr        = 300;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 0.3;   
@@ -159,6 +171,7 @@ molFracLiqCOInit    = 0.01;
 molFracLiqH2Init    = 0.01;
 molFracLiqH2OInit   = 0;
 molFracLiqAlkInit   = 1e-10*ones(nLumps,1); 
+molFracLiqAlkInit(nLumps-1) = 0.5; 
 molFracLiqAlkInit(nLumps) = 0.5; 
 molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit']';     % add water
 molFracLiqInit      = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
@@ -177,7 +190,7 @@ avMolMassGasInit   = molFracGasInit'*Mw; % kg/kmol gas feed average molar mass
 
 %% feed gas density
 gasDensityInit    = pTot*avMolMassGasInit/gasConst/tempGasInit; % kg/m^3  gas feed total density
-liqDensityInit    = 600; % estimate based on HYSYS flash simulations
+liqDensityInit    = 651; % ErkeyRoddenAkgerman (1988), table V, 534 K
 
 sluDensityInit    = liqDensityInit*(1-liqDensityInit/catSkeletonDensity*volFracSol) + ...
                     catParticleDensity*volFracSol; %MarettoKrishna1999, equation 23

@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 30;
+P = 40;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -126,11 +126,13 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         viscSlu = viscLiq*(1+einsteinK*volFracSol);
         
         parStructkL = struct('liqDensity',liqDensity,'gasDensity',gasDensity, ...
-            'diffCoefCO',diffCoefCO,'viscLiq',viscLiq,'graConst',graConst);
+            'diffCoefCO',diffCoefCO,'viscLiq',viscLiq,'graConst',graConst, ...
+            'molecularDia',molecularDia,'Mw',Mw,'mWoctacosane',mWoctacosane, ...
+            'mDoctacosane',mDoctacosane,'Nparameter',Nparameter, ...
+            'tempSlu',tempSlu);
+            
         
-        
-        
-    %    kL = getMassTransCoeff(parStructkL);
+        kL = getMassTransCoeff(parStructkL);
                 
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
