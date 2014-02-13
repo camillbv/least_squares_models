@@ -442,6 +442,14 @@ vRES_L = solVec(:,nCompGas+nCompLiq + 2);
 tRES_G = solVec(:,nCompGas+nCompLiq + 3);
 tRES_L = solVec(:,nCompGas+nCompLiq + 4);
 
+%% calculate mole fractions
+mRES_G = zeros(N,nCompGas);
+mRES_L = zeros(N,nCompLiq);
+for zPoint = 1:N
+    mRES_G(zPoint,:) = wRES_G(zPoint,:)'./Mw/(sum(wRES_G(zPoint,:)'./Mw));
+    mRES_L(zPoint,:) = wRES_L(zPoint,:)'./Mw/(sum(wRES_L(zPoint,:)'./Mw));
+end
+
 %% make plots
 figure(1)
 subplot(2,1,1)
@@ -472,14 +480,14 @@ ylabel('liquid phase mass fractions')
 xlabel('reactor length')
 grid on
 
-%% calculate conversion of CO (%) on mass basis
-wconversion     = 100*wRES_G(:,1);
-wcum_conversion = 100*(wtFracGasInit(1) - wRES_G(:,1))./wtFracGasInit(1);
+%% calculate conversion of CO (%) on mole basis
+conversion     = 100*mRES_G(:,1);
+cum_conversion = 100*(molFracGasInit(1) - mRES_G(:,1))./molFracGasInit(1);
 
 figure(2)
 subplot(2,2,1)
-plot(COLUMN,wconversion,COLUMN,wcum_conversion,'r')
-ylabel('Conversion (in mass %)')
+plot(COLUMN,conversion,COLUMN,cum_conversion,'r')
+ylabel('Conversion (in mole %)')
 xlabel('Reactor length')
 legend('Conversion','Cumulative Conversion')
 
