@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 5;
+P = 50;
 
 disp('low number of points - can be increased.')
 N = P+1;
