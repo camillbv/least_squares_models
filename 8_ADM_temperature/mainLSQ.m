@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 50;
+P = 5;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -113,7 +113,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
                
         %% kinetic constants
         aS = 2.592e-12*exp(-37.3*1000/(gasConst/1000)./tempSlu);
-        bS = 1.23e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
+        bS =  1.23e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
         
         parStructReactRate = struct('aS',aS,'bS',bS,'equiConst',equiConst, ...
             'molFracLiq',molFracLiq,'pTot',pTot);
@@ -223,7 +223,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             GASFLUX = f_ADM(1:N);
             GASWTFR = max(f_ADM(N+1:2*N),0)*underrelaxation + f_oldGAS*(1-underrelaxation)  ;
             LIQFLUX = f_ADM(2*N+1:3*N);
-            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation);  
+            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation);
             
             %% store new values in appropriate matrix
             wtFracGasADM(:,cNo) = GASWTFR;
@@ -237,68 +237,68 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         
     end 
     
-    %% update superficial velocities
-    
-    %% L
-    L1 = diag(gasDensity)*D + diag(D*gasDensity);
-    L2 = zeros(N,N);
-    L3 = zeros(N,N); 
-    L4 = liqDensity*D;
-    
-    L = [L1 L2; L3 L4];
-    
-    %% g
-    wtFracGas = solVec(:,1:nCompGas);
-    wtFracLiq = solVec(:,nCompGas+1:nCompGas+nCompLiq);
-    massTransSum = zeros(N,1);
-    for zP = 1:N
-        massTransSum(zP) = sum(kL(zP,:)'.*areaDensity.*liqDensity.*(1./equiConst.* ...
-            avMolMassGas(zP)/avMolMassLiq(zP).*wtFracGas(zP,:)' - ...
-           wtFracLiq(zP,:)'));
-    end
-    g = zeros(2*N,1);
-    g(1:N)     = -massTransSum;
-    g(N+1:2*N) =  massTransSum;
-    
-    %% W
-    W = diag([wCOLUMN; wCOLUMN]);
-    
-    %% F
-    F = L'*W*g;
-    
-    %% A
-    A = L'*W*L;
-    
-    %% B
-    B1 = zeros(N,N); B1(1,1) = 1; % set inlet gas superficial velocity
-    B2 = zeros(N,N);
-    B3 = zeros(N,N); 
-    B4 = zeros(N,N); B4(1,1) = 1; % set inlet liquid superficial velocity
-    
-    B = [B1 B2; B3 B4];
-    
-    %% F_gamma
-    F_gamma      = zeros(2*N,1);
-    F_gamma(1)   = BC(nCompGas+nCompLiq+1);
-    F_gamma(N+1) = BC(nCompGas+nCompLiq+1);
-    
-    %% solve
-    f_SUPVEL = (A+B)\(F+F_gamma);
-    f_newGAS = f_SUPVEL(1:N);
-    f_newLIQ = f_SUPVEL(N+1:2*N);
-    
-    %% pick up old values
-    f_oldGAS = supVelGas;
-    f_oldLIQ = supVelLiq;
-    
-    %% underrelaxation
-    underrelaxation = 0.5;
-    f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
-    f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
-    
-    %% update solution vector
-    solVec(:,nCompGas+nCompLiq + 1) = f_GAS;
-    solVec(:,nCompGas+nCompLiq + 2) = f_LIQ;
+%     %% update superficial velocities
+%     
+%     %% L
+%     L1 = diag(gasDensity)*D + diag(D*gasDensity);
+%     L2 = zeros(N,N);
+%     L3 = zeros(N,N); 
+%     L4 = liqDensity*D;
+%     
+%     L = [L1 L2; L3 L4];
+%     
+%     %% g
+%     wtFracGas = solVec(:,1:nCompGas);
+%     wtFracLiq = solVec(:,nCompGas+1:nCompGas+nCompLiq);
+%     massTransSum = zeros(N,1);
+%     for zP = 1:N
+%         massTransSum(zP) = sum(kL(zP,:)'.*areaDensity.*liqDensity.*(1./equiConst.* ...
+%             avMolMassGas(zP)/avMolMassLiq(zP).*wtFracGas(zP,:)' - ...
+%            wtFracLiq(zP,:)'));
+%     end
+%     g = zeros(2*N,1);
+%     g(1:N)     = -massTransSum;
+%     g(N+1:2*N) =  massTransSum;
+%     
+%     %% W
+%     W = diag([wCOLUMN; wCOLUMN]);
+%     
+%     %% F
+%     F = L'*W*g;
+%     
+%     %% A
+%     A = L'*W*L;
+%     
+%     %% B
+%     B1 = zeros(N,N); B1(1,1) = 1; % set inlet gas superficial velocity
+%     B2 = zeros(N,N);
+%     B3 = zeros(N,N); 
+%     B4 = zeros(N,N); B4(1,1) = 1; % set inlet liquid superficial velocity
+%     
+%     B = [B1 B2; B3 B4];
+%     
+%     %% F_gamma
+%     F_gamma      = zeros(2*N,1);
+%     F_gamma(1)   = BC(nCompGas+nCompLiq+1);
+%     F_gamma(N+1) = BC(nCompGas+nCompLiq+1);
+%     
+%     %% solve
+%     f_SUPVEL = (A+B)\(F+F_gamma)
+%     f_newGAS = f_SUPVEL(1:N);
+%     f_newLIQ = f_SUPVEL(N+1:2*N);
+%     
+%     %% pick up old values
+%     f_oldGAS = supVelGas;
+%     f_oldLIQ = supVelLiq;
+%     
+%     %% underrelaxation
+%     underrelaxation = 0.5;
+%     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
+%     f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
+%     
+%     %% update solution vector
+%     solVec(:,nCompGas+nCompLiq + 1) = f_GAS;
+%     solVec(:,nCompGas+nCompLiq + 2) = f_LIQ;
     
     %% update TEMPERATURE for gas and slurry
     %% ---

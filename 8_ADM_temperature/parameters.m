@@ -102,7 +102,7 @@ volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in rea
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
 
 %% area density
-sauterDiameter  = 7*10^-3; % m Sauter Mean Diameter (DeckwerLoisiZaidiRalek1980) TO IMPROVE
+sauterDiameter  = 3*10^-3; % m Sauter Mean Diameter ADJUSTED
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
