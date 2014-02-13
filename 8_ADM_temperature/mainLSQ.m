@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 40;
+P = 50;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -99,7 +99,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             molFracGas(zPoint,:) = wtFracGas(zPoint,:)'./Mw/(sum(wtFracGas(zPoint,:)'./Mw));
             molFracLiq(zPoint,:) = wtFracLiq(zPoint,:)'./Mw/(sum(wtFracLiq(zPoint,:)'./Mw));
         end
-        
+             
         %% update parameters dependent on z or the solution vector
         parStructAvMolMassGas = struct('molFracGas',molFracGas,'Mw',Mw);
         parStructAvMolMassLiq = struct('molFracLiq',molFracLiq,'Mw',Mw);
@@ -217,13 +217,13 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             f_oldLIQ = wtFracLiq(:,cNo);
         
             %% underrelaxation
-            underrelaxation = 0.5;
+            underrelaxation = 0.05;
             
             %% pick out weight fractions and fluxes
             GASFLUX = f_ADM(1:N);
             GASWTFR = max(f_ADM(N+1:2*N),0)*underrelaxation + f_oldGAS*(1-underrelaxation)  ;
             LIQFLUX = f_ADM(2*N+1:3*N);
-            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation)  ;
+            LIQWTFR = max(f_ADM(3*N+1:4*N),0)*underrelaxation + f_oldLIQ*(1-underrelaxation);  
             
             %% store new values in appropriate matrix
             wtFracGasADM(:,cNo) = GASWTFR;
