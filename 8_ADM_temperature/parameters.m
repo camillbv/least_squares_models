@@ -107,7 +107,7 @@ areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
 diaCol          = 8;   % m GUESSING
-dispCoefLiq     = 0.68*diaCol^1.4*supVelGasInit^0.3;
+dispCoefLiq     = 0.5*0.68*diaCol^1.4*supVelGasInit^0.3;
 dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;  
 
 %% thermal conductivities
