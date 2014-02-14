@@ -38,7 +38,7 @@ D      = 2/totalHeight*D_ref;               % physical domain   0,totalHeight
 
 %% run ode15s to get initial estimates for weight fractions
 y0 = [wtFracGasInit' wtFracLiqInit' supVelGasInit supVelLiqInit tempGasInit tempSluInit];
-[zODE,yODE] = ode15s('model_equations',COLUMN,y0);
+[zODE,yODE] = ode15s('model_equations',COLUMN,y0)
 
 %% use ODE estimate as initial guess
 solVec = reshape(yODE,N,nVar);
@@ -259,7 +259,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     
     L = [L1 L2; L3 L4];
     
-    %% g
+    %% g 
     wtFracGas = solVec(:,1:nCompGas);
     wtFracLiq = solVec(:,nCompGas+1:nCompGas+nCompLiq);
     massTransSum = zeros(N,1);
@@ -295,7 +295,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     %% F_gamma
     F_gamma      = zeros(2*N,1);
     F_gamma(1)   = BC(nCompGas+nCompLiq+1);
-    F_gamma(N+1) = BC(nCompGas+nCompLiq+1);
+    F_gamma(N+1) = BC(nCompGas+nCompLiq+2);
     
     %% solve
     f_SUPVEL = (A+B)\(F+F_gamma);
