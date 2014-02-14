@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 10;
+P = 40;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -38,7 +38,7 @@ D      = 2/totalHeight*D_ref;               % physical domain   0,totalHeight
 
 %% run ode15s to get initial estimates for weight fractions
 y0 = [wtFracGasInit' wtFracLiqInit' supVelGasInit supVelLiqInit tempGasInit tempSluInit];
-[zODE,yODE] = ode15s('model_equations',COLUMN,y0)
+[zODE,yODE] = ode15s('model_equations',COLUMN,y0);
 
 %% use ODE estimate as initial guess
 solVec = reshape(yODE,N,nVar);
@@ -118,7 +118,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
         parStructReactRate = struct('aS',aS,'bS',bS,'equiConst',equiConst, ...
             'molFracLiq',molFracLiq,'pTot',pTot);
         
-        reactRate    = get_reactRate(parStructReactRate);
+        disp('reaction rate multiplied with 0')
+        reactRate    = 0*get_reactRate(parStructReactRate);
         
         %% mass transfer parameters
         sluDensity  = sluDensityInit;
@@ -131,8 +132,10 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             'mDoctacosane',mDoctacosane,'Nparameter',Nparameter, ...
             'tempSlu',tempSlu);
             
-        
-        kL = getMassTransCoeff(parStructkL);
+        %% mass transfer coefficient
+        disp('mass transfer set to 0')
+        kL = 0*getMassTransCoeff(parStructkL);
+              
                 
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
@@ -263,16 +266,12 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     wtFracGas = solVec(:,1:nCompGas);
     wtFracLiq = solVec(:,nCompGas+1:nCompGas+nCompLiq);
     massTransSum = zeros(N,1);
-    wtFracGas
-    wtFracLiq
+
     for zP = 1:N
         massTransSum(zP) = sum(kL(zP,:)'.*areaDensity.*liqDensity.*(1./equiConst.* ...
             avMolMassGas(zP)/avMolMassLiq(zP).*wtFracGas(zP,:)' - ...
            wtFracLiq(zP,:)'));
     end
-    massTransSum
-%     disp('Scaling down mass transfer in velocity predictions')
-%     massTransSum = 1e-2.*massTransSum;
     
     g = zeros(2*N,1);
     g(1:N)     = -massTransSum;
@@ -318,11 +317,10 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     subplot(2,1,2)
     plot(COLUMN,f_newLIQ)
     ylabel('predicted new liquid superficial velocity')
-    hold on
-    
+    hold on    
     
     %% underrelaxation
-    underrelaxation = 0.5;
+    underrelaxation = 0.05;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
     
@@ -432,8 +430,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     
     %% solve
     f = (A+B)\(F+F_gamma);
-    f_newGAS = f(N+1:2*N);
-    f_newSLU = f(3*N+1:4*N);
+    f_newGAS = f(N+1:2*N)
+    f_newSLU = f(3*N+1:4*N)
     
     %% pick up old values
     f_oldGAS = tempGas;
@@ -451,7 +449,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on
     
     %% underrelaxation
-    underrelaxation = 0.5;
+    underrelaxation = 0.05;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_SLU = f_newSLU*underrelaxation + f_oldSLU*(1-underrelaxation);
     
