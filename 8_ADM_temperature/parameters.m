@@ -102,7 +102,7 @@ volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in rea
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
 
 %% area density
-sauterDiameter  = 3*10^-3; % m Sauter Mean Diameter ADJUSTED
+sauterDiameter  = 20*10^-3; % m Sauter Mean Diameter ADJUSTED
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
@@ -170,7 +170,7 @@ molFracLiqCOInit    = 0.01;
 molFracLiqH2Init    = 0.01;
 molFracLiqH2OInit   = 0;
 molFracLiqAlkInit   = 1e-10*ones(nLumps,1); 
-molFracLiqAlkInit(nLumps-1) = 0.5; 
+%molFracLiqAlkInit(nLumps-1) = 0.5; 
 molFracLiqAlkInit(nLumps) = 0.5; 
 molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit']';     % add water
 molFracLiqInit      = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
