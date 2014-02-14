@@ -32,6 +32,7 @@ function kL = getMassTransCoeff(par)
     %% perform calculations
     % calculate diffusion coefficients of each species in liquid at current
     % temperature, according to Erkey, Rodden and Akgerman (1990)
+    
     beta        = 94.5./(Mw.^0.239)./(mWoctacosane^0.781)./((molecularDia.*mDoctacosane).^1.134);
     b           = 1.206 + 0.0632*(molecularDia./mDoctacosane);
     Vnull       = (Nparameter.*mDoctacosane^3)/sqrt(2);
