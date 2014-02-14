@@ -71,7 +71,8 @@ K = importdata('utregning_ki_3000_kPa.txt','\t',0); % import text file written f
 equiConstAll = K.data;
 
 disp('Manual selection of equiConst values!')
-equiConst = equiConstAll([1:3 7 18 26 34]);
+%equiConst = equiConstAll([1:3 7 18 26 34]);
+equiConst = equiConstAll([1:3 7 18 26 26]);
 
 %% diffusion coefficients (all valid for 240 deg C)
 diffCoefRef = 2*10^-9; % m^2/s reference diffusion coefficient in FT liquid Krishna (1999), page 284

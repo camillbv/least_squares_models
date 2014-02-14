@@ -20,7 +20,7 @@ format long
 parameters
 
 %% set numerical parameters
-P = 50;
+P = 10;
 
 disp('low number of points - can be increased.')
 N = P+1;
@@ -263,11 +263,14 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     wtFracGas = solVec(:,1:nCompGas);
     wtFracLiq = solVec(:,nCompGas+1:nCompGas+nCompLiq);
     massTransSum = zeros(N,1);
+    wtFracGas
+    wtFracLiq
     for zP = 1:N
         massTransSum(zP) = sum(kL(zP,:)'.*areaDensity.*liqDensity.*(1./equiConst.* ...
             avMolMassGas(zP)/avMolMassLiq(zP).*wtFracGas(zP,:)' - ...
            wtFracLiq(zP,:)'));
     end
+    massTransSum
 %     disp('Scaling down mass transfer in velocity predictions')
 %     massTransSum = 1e-2.*massTransSum;
     
