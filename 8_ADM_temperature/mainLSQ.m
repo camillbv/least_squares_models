@@ -49,7 +49,7 @@ BC = y0';
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 50;
+max_iter            = 10;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -220,7 +220,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             f_oldLIQ = wtFracLiq(:,cNo);
         
             %% underrelaxation
-            underrelaxation = 0.05;
+            underrelaxation = 0.2;
             
             %% pick out weight fractions and fluxes
             GASFLUX = f_ADM(1:N);
@@ -320,7 +320,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on    
     
     %% underrelaxation
-    underrelaxation = 0.05;
+    underrelaxation = 0.5;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
     
@@ -449,7 +449,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on
     
     %% underrelaxation
-    underrelaxation = 0.05;
+    underrelaxation = 0.5;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_SLU = f_newSLU*underrelaxation + f_oldSLU*(1-underrelaxation);
     
