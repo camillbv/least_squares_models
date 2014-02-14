@@ -430,8 +430,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     
     %% solve
     f = (A+B)\(F+F_gamma);
-    f_newGAS = f(N+1:2*N)
-    f_newSLU = f(3*N+1:4*N)
+    f_newGAS = f(N+1:2*N);
+    f_newSLU = f(3*N+1:4*N);
     
     %% pick up old values
     f_oldGAS = tempGas;

@@ -113,6 +113,8 @@ dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;
 %% thermal conductivities
 einsteinK = 4.5;        % Meisl (1967)
 viscLiq   = 1.05*1e-3;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530 K
+%viscLiq   = 2.9*1e-4;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530 K
+
 condLiq   = 0.113;      % W/(mK), Maretto Krishna 1999, table 1
 condSol   =   1.7;      % W/(mK), Maretto Krishna 1999, table 1
 
@@ -172,7 +174,6 @@ molFracLiqCOInit    = 0.01;
 molFracLiqH2Init    = 0.01;
 molFracLiqH2OInit   = 0;
 molFracLiqAlkInit   = 1e-10*ones(nLumps,1); 
-%molFracLiqAlkInit(nLumps-1) = 0.5; 
 molFracLiqAlkInit(nLumps) = 1; 
 molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit']';     % add water
 molFracLiqInit      = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
