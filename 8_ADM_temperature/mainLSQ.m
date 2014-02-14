@@ -268,8 +268,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             avMolMassGas(zP)/avMolMassLiq(zP).*wtFracGas(zP,:)' - ...
            wtFracLiq(zP,:)'));
     end
-    disp('Scaling down mass transfer in velocity predictions')
-    massTransSum = 1e-2.*massTransSum;
+%     disp('Scaling down mass transfer in velocity predictions')
+%     massTransSum = 1e-2.*massTransSum;
     
     g = zeros(2*N,1);
     g(1:N)     = -massTransSum;
