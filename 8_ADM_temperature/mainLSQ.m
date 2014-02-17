@@ -133,6 +133,8 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             
         %% mass transfer coefficient
         kL = getMassTransCoeff(parStructkL);
+     %   disp('manipulate lighter HC fraction kL value')
+      %  kL(:,4)=2*kL(:,4);
                               
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        
         for cNo = 1:nComp
@@ -217,7 +219,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             f_oldLIQ = wtFracLiq(:,cNo);
         
             %% underrelaxation
-            underrelaxation = 0.05;
+            underrelaxation = 0.2;
             
             %% pick out weight fractions and fluxes
             GASFLUX = f_ADM(1:N);
@@ -317,13 +319,13 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on    
     
     %% underrelaxation
-    underrelaxation = 0.05;
+    underrelaxation = 0.2;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_LIQ = f_newLIQ*underrelaxation + f_oldLIQ*(1-underrelaxation);
     
     %% update solution vector
- %   solVec(:,nCompGas+nCompLiq + 1) = f_GAS;
- %   solVec(:,nCompGas+nCompLiq + 2) = f_LIQ;
+    solVec(:,nCompGas+nCompLiq + 1) = f_GAS;
+    solVec(:,nCompGas+nCompLiq + 2) = f_LIQ;
     
     %% update TEMPERATURE for gas and slurry
     %% ---
@@ -446,7 +448,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on
     
     %% underrelaxation
-    underrelaxation = 0.05;
+    underrelaxation = 0.2;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_SLU = f_newSLU*underrelaxation + f_oldSLU*(1-underrelaxation);
     

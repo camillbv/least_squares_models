@@ -48,12 +48,13 @@ avCNoAlkanes = zeros(nLumps,1);
 molWtAlkanes = zeros(nLumps,1);
 for lNo = 1:(nLumps-1)
     n = lumpKey(lNo);
-    m = lumpKey(lNo+1);
+    m = lumpKey(lNo+1)-1;
     nuAlkanes(lNo) = (1 - alpha)*(alpha^(n-1)-alpha^m);
     avCNoAlkanes(lNo) = (n*alpha^(n-1) - (n-1)*alpha^n - (m+1)*alpha^m + m*(alpha^(m+1))) / ...
                             ((1-alpha)*(alpha^(n-1)-alpha^m));
     molWtAlkanes(lNo) = avCNoAlkanes(lNo)*Z_CO + (2*avCNoAlkanes(lNo)+2)*Z_H;
 end
+
 n = lumpKey(nLumps);
 nuAlkanes(nLumps) = (1-alpha)*(alpha^(n-1));
 avCNoAlkanes(nLumps) = n + alpha/(1-alpha);
@@ -107,7 +108,7 @@ sauterDiameter  = 1*10^-3; % m Sauter Mean Diameter ADJUSTED
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
-diaCol          = 6;   % m GUESSING
+diaCol          = 5;   % m GUESSING
 dispCoefLiq     = 0.68*diaCol^1.4*supVelGasInit^0.3;
 dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;  
 
@@ -142,14 +143,14 @@ hL =   6; % GUESSWORK
 
 %% reactor cooling system
 diaTub          = 0.114;    % m outer diameter of cooling tube
-numTub          = 1200;     % - number of cooling tubes
+numTub          = 1200;     % - number of cooling tubes 
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 400;      % K cooling water temperature
+tempSurr        = 300;      % K cooling water temperature
 
 %% inlet gas phase concentrations
-molFracGasCOInit    = 1/4;   
-molFracGasH2Init    = 4/3; 
+molFracGasCOInit    = 1/3;   
+molFracGasH2Init    = 2/3; 
 molFracGasH2OInit   = 1e-5 ;     
 molFracGasAlkInit   = 1e-5*ones(nLumps,1)';
 molFracGasInit      = [molFracGasCOInit molFracGasH2Init molFracGasH2OInit molFracGasAlkInit]';
