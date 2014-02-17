@@ -133,7 +133,6 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             'tempSlu',tempSlu);
             
         %% mass transfer coefficient
-        disp('mass transfer set to 0')
         kL = getMassTransCoeff(parStructkL);
               
                 
