@@ -108,7 +108,7 @@ sauterDiameter  = 1*10^-3; % m Sauter Mean Diameter ADJUSTED
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
-diaCol          = 5;   % m GUESSING
+diaCol          = 6;   % m GUESSING
 dispCoefLiq     = 0.68*diaCol^1.4*supVelGasInit^0.3;
 dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;  
 
@@ -146,7 +146,7 @@ diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes 
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 300;      % K cooling water temperature
+tempSurr        = 375;      % K cooling water temperature
 
 %% inlet gas phase concentrations
 molFracGasCOInit    = 1/3;   

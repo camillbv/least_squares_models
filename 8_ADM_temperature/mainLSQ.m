@@ -43,13 +43,18 @@ y0 = [wtFracGasInit' wtFracLiqInit' supVelGasInit supVelLiqInit tempGasInit temp
 %% use ODE estimate as initial guess
 solVec = reshape(yODE,N,nVar);
 
+%% manually add temperature profile
+
+solVec(:,nCompGas+nCompLiq+3) = ones(N,1)*513;
+solVec(:,nCompGas+nCompLiq+4) = ones(N,1)*513;
+
 %% boundary conditions
 BC = y0';
 
 %% ---- START OF ITERATION LOOP
 
 %% set overall iteration parameters
-max_iter            = 10;
+max_iter            = 50;
 tol                 = 1e-13;
 iteration_error     = 1;
 L2_norm_tot         = 1;
@@ -448,13 +453,13 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
     hold on
     
     %% underrelaxation
-    underrelaxation = 0.2;
+    underrelaxation = 0.02;
     f_GAS = f_newGAS*underrelaxation + f_oldGAS*(1-underrelaxation);
     f_SLU = f_newSLU*underrelaxation + f_oldSLU*(1-underrelaxation);
     
     %% update solution vector
-    solVec(:,nCompGas+nCompLiq+3) = f_GAS;
-    solVec(:,nCompGas+nCompLiq+4) = f_SLU;
+%    solVec(:,nCompGas+nCompLiq+3) = f_GAS;
+%    solVec(:,nCompGas+nCompLiq+4) = f_SLU;
     
     %%
     
