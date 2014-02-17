@@ -219,7 +219,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             f_oldLIQ = wtFracLiq(:,cNo);
         
             %% underrelaxation
-            underrelaxation = 0.2;
+            underrelaxation = 0.5;
             
             %% pick out weight fractions and fluxes
             GASFLUX = f_ADM(1:N);
