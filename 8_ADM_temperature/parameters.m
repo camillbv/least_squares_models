@@ -163,21 +163,32 @@ area            = 4*(diaCol^2 - numTub*diaTub^2);
 tempSurr        = 350;      % K cooling water temperature
 
 %% inlet gas phase concentrations
-molFracGasCOInit    = 0.3;   
-molFracGasH2Init    = 0.6; 
-molFracGasH2OInit   = 0.00001;     
+molFracGasCOInit    = 1/3;   
+molFracGasH2Init    = 2/3; 
+molFracGasH2OInit   = 0 ;     
 molFracGasAlkInit   = zeros(nLumps,1)';
 molFracGasInit      = [molFracGasCOInit molFracGasH2Init molFracGasH2OInit molFracGasAlkInit]';
 molFracGasInit      = molFracGasInit./sum(molFracGasInit);  % scale it to sum to 1
 
 %% inlet liquid phase concentrations
-molFracLiqCOInit    = 0.01;
-molFracLiqH2Init    = 0.01;
+molFracLiqCOInit    = 0;
+molFracLiqH2Init    = 0;
 molFracLiqH2OInit   = 0;
-molFracLiqAlkInit   = 1e-10*ones(nLumps,1); 
-molFracLiqAlkInit(nLumps) = 1; 
-molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit']';     % add water
+molFracLiqAlkInit   = zeros(nLumps,1)'; 
+molFracLiqAlkInit(nLumps-1) = 0.5; 
+molFracLiqAlkInit(nLumps) = 0.5; 
+molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit]';     % add water
 molFracLiqInit      = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
+
+%% add simplified flash
+
+lTgFlash = equiConst.*molFracLiqInit; % boiling off liquid phase
+gTlFlash = 1./equiConst.*molFracGasInit; % soluble in liquid from gas phase
+
+molFracGasInit = molFracGasInit + lTgFlash;
+molFracLiqInit = molFracLiqInit + gTlFlash;
+molFracGasInit = molFracGasInit./sum(molFracGasInit);  % scale it to sum to 1
+molFracLiqInit = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
 
 %% convert to weight fractions
 wtFracGasInit   = molFracGasInit.*Mw./(molFracGasInit'*Mw); %  kg/kg (unitless)  gas feed weight fractions
