@@ -42,10 +42,8 @@ liqDensity = liqDensityInit; % constant
 aS = 2.592e-12*exp(-37.3*1000/(gasConst/1000)./tempSlu);
 bS =  1.23e-12*exp( 68.5*1000/(gasConst/1000)./tempSlu);
 
-disp('no reaction rate in model_equations')
-reactRate = 0*(aS*equiConst(1)*molFracLiq(1)*equiConst(2)*molFracLiq(2)*pTot^2 )/...
-                  ((1+bS*equiConst(1)*molFracLiq(1)*pTot)^2);
-              
+reactRate = max((aS*equiConst(1)*molFracLiq(1)*equiConst(2)*molFracLiq(2)*pTot^2 )/...
+                  ((1+bS*equiConst(1)*molFracLiq(1)*pTot)^2),0);
               
 %% mass transfer between gas and slurry phase  
 parStructkL = struct('liqDensity',liqDensity,'gasDensity',gasDensity, ...
@@ -53,7 +51,7 @@ parStructkL = struct('liqDensity',liqDensity,'gasDensity',gasDensity, ...
     'molecularDia',molecularDia,'Mw',Mw,'mWoctacosane',mWoctacosane, ...
     'mDoctacosane',mDoctacosane,'Nparameter',Nparameter, ...
     'tempSlu',tempSlu);
-kL = 0*getMassTransCoeff(parStructkL)';
+kL = getMassTransCoeff(parStructkL)';
 
 massTrans = kL.*areaDensity.*(1./equiConst.*avMolMassGas./avMolMassLiq.*wtFracGas-wtFracLiq);
 

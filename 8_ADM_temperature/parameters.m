@@ -6,10 +6,10 @@
 
 %% global variables
 
-global a b tempGasInit tempSluInit nu Mw catDensity ...
+global tempGasInit tempSluInit nu Mw catDensity ...
        volFracSol volFracGas volFracLiq hL heatCapGas perimeter...
-       gasConst supVelGasInit supVelLiqInit pTot factor_a factor_b ...
-       kLa equiConst nLumps liqDensityInit dispCoefGas dispCoefLiq ...
+       gasConst supVelGasInit supVelLiqInit pTot ...
+       equiConst nLumps liqDensityInit dispCoefGas dispCoefLiq ...
        nComp deltaHr areaDensity heatCapSluInit sluDensityInit area ...
        volFracSlu tempSurr graConst ...
        condLiq condSol viscLiq einsteinK ...
@@ -75,9 +75,9 @@ disp('Manual selection of equiConst values!')
 equiConst = equiConstAll([1:3 7 18 26 34]);
 
 %% diffusion coefficients (all valid for 240 deg C)
-diffCoefRef = 2*10^-9; % m^2/s reference diffusion coefficient in FT liquid Krishna (1999), page 284
-diffCoefCO  = 45.5*10^-9; % m^2/s diffusion coefficient of CO in FT liquid  Krishna (1999), page 284
-diffCoefH2  = 17.2*10^-9; % m^2/s diffusion coefficient of H2 in FT liquid  Krishna (1999), page 284
+%diffCoefRef = 2*10^-9; % m^2/s reference diffusion coefficient in FT liquid Krishna (1999), page 284
+%diffCoefCO  = 45.5*10^-9; % m^2/s diffusion coefficient of CO in FT liquid  Krishna (1999), page 284
+%diffCoefH2  = 17.2*10^-9; % m^2/s diffusion coefficient of H2 in FT liquid  Krishna (1999), page 284
 
 %% diffusion / mass transfer parameters
 % components: [CO H2 H2O C1-C10 C11-C20 C21-C30 C31+]
@@ -103,11 +103,11 @@ volFracLiq      =  1-volFracSol - volFracGas; % volume fraction of liquid in rea
 volFracSlu      = volFracLiq + volFracGas; % volume fraction of slurry in reactor
 
 %% area density
-sauterDiameter  = 10*10^-3; % m Sauter Mean Diameter ADJUSTED
+sauterDiameter  = 1*10^-3; % m Sauter Mean Diameter ADJUSTED
 areaDensity     = 6*volFracGas/sauterDiameter;
 
 %% dispersion coefficients (1 m column diameter)
-diaCol          = 8;   % m GUESSING
+diaCol          = 6;   % m GUESSING
 dispCoefLiq     = 0.68*diaCol^1.4*supVelGasInit^0.3;
 dispCoefGas     = 21.7*diaCol^1.5*supVelGasInit^1.8;  
 
@@ -126,7 +126,7 @@ catParticleDensity   =   647;  % (kg solids and liquids)/(m^3 of particle includ
 catDensity  =  catSkeletonDensity*volFracSol; % kg catalyst / m^3   catalyst density in reactor
 
 %% reactor properties
-totalHeight 		 =     50; % m 		length of dispersion
+totalHeight 		 =     30; % m 		length of dispersion
 
 %% temperature
 tempGasInit     = tempCelsiusInit + 273; % K      Reactor temperature 
@@ -145,22 +145,22 @@ diaTub          = 0.114;    % m outer diameter of cooling tube
 numTub          = 1200;     % - number of cooling tubes
 perimeter       = diaCol   + numTub*diaTub;
 area            = 4*(diaCol^2 - numTub*diaTub^2);
-tempSurr        = 350;      % K cooling water temperature
+tempSurr        = 400;      % K cooling water temperature
 
 %% inlet gas phase concentrations
-molFracGasCOInit    = 1/3;   
-molFracGasH2Init    = 2/3; 
-molFracGasH2OInit   = 0 ;     
-molFracGasAlkInit   = zeros(nLumps,1)';
+molFracGasCOInit    = 1/4;   
+molFracGasH2Init    = 4/3; 
+molFracGasH2OInit   = 1e-5 ;     
+molFracGasAlkInit   = 1e-5*ones(nLumps,1)';
 molFracGasInit      = [molFracGasCOInit molFracGasH2Init molFracGasH2OInit molFracGasAlkInit]';
 molFracGasInit      = molFracGasInit./sum(molFracGasInit);  % scale it to sum to 1
 
 %% inlet liquid phase concentrations
 molFracLiqCOInit    = 0;
 molFracLiqH2Init    = 0;
-molFracLiqH2OInit   = 0;
-molFracLiqAlkInit   = zeros(nLumps,1)'; 
-molFracLiqAlkInit(nLumps-1) = 0.5; 
+molFracLiqH2OInit   = 1e-5;
+molFracLiqAlkInit   = 1e-5*ones(nLumps,1)'; 
+%molFracLiqAlkInit(nLumps-1) = 0.5; 
 molFracLiqAlkInit(nLumps) = 0.5; 
 molFracLiqInit      = [molFracLiqCOInit molFracLiqH2Init molFracLiqH2OInit molFracLiqAlkInit]';     % add water
 molFracLiqInit      = molFracLiqInit./sum(molFracLiqInit);  % scale it to sum to 1
