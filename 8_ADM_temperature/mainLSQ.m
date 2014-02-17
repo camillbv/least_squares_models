@@ -134,7 +134,7 @@ while  sum(L2_norm_tot) > tol && iter < max_iter % criteria to continue iteratio
             
         %% mass transfer coefficient
         disp('mass transfer set to 0')
-        kL = 0*getMassTransCoeff(parStructkL);
+        kL = getMassTransCoeff(parStructkL);
               
                 
         %% FLUX AND WEIGHT FRACTIONS FOR ALL VARIABLES        

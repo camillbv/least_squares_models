@@ -17,14 +17,14 @@ global a b tempGasInit tempSluInit nu Mw catDensity ...
 
 %           value     unit        description         source
 %% kinetic parameters
-a        = 53.11;  % mmol/(min gcat MPa^2) kin.par. Satterfield(1991), table V
-b        = 22.26;  % 1/MPa     kin.par.             Satterfield(1991), table V
+% a        = 53.11;  % mmol/(min gcat MPa^2) kin.par. Satterfield(1991), table V
+% b        = 22.26;  % 1/MPa     kin.par.             Satterfield(1991), table V
 alpha    = 0.9;    % [-] parameter in the ASF distribution Krishna(1999), who cites [11] (see article)
 deltaHr  = -167*10^6; % J/kmol  heat of reaction Visconti2013
 
 %% unit conversion factor of kinetic expression
-factor_a = 10^-15/60;
-factor_b = 10^-6;
+% factor_a = 10^-15/60;
+% factor_b = 10^-6;
 
 %% physical properties
 molWtCO     =  28.0;  % kg/kmol  molar weight CO      SI Chemical Data, page 32
@@ -118,20 +118,6 @@ viscLiq   = 1.05*1e-3;  % Pa*s , Sehabiague 2013a, table 3, Heavy F-T Cut at 530
 
 condLiq   = 0.113;      % W/(mK), Maretto Krishna 1999, table 1
 condSol   =   1.7;      % W/(mK), Maretto Krishna 1999, table 1
-
-% %% mass transfer coefficients
-% kLaCO =  volFracGas*0.5*sqrt(diffCoefCO/diffCoefRef); % 1/s volumetric mass transfer coefficient of CO Krishna (1999), page 284 
-% kLaH2 =  volFracGas*0.5*sqrt(diffCoefH2/diffCoefRef); % 1/s volumetric mass transfer coefficient of H2 Krishna (1999), page 284 
-% kLaH2O = 0.25; % set to an arbitrarily value (most of the water is in gas phase at reactor conditions)
-% 
-% % mass transfer coefficients for alkanes
-% kLaAlkanes = zeros(nLumps,1);
-% for i = 1:nLumps
-%     kLaAlkanes(i) = 0.1;
-% end
-% kLa = [kLaCO kLaH2 kLaH2O kLaAlkanes']';
-
-kLa =    [0.066   0.105   0.0852   0.0450   0.0328   0.027   0.025]'; % simualted
 
 %% catalyst properties
 catSkeletonDensity   =  2030;  % (kg solids)/(m^3 of particle excluding voids) 
