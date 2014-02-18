@@ -1,0 +1,5 @@
+function cRATE = COALESCENCE_RATE(XI1,XI2,EPSILON)
+
+cRATE = pi/4*sqrt(2)*EPSILON^(1/3)*(XI1+XI2).^2.*(XI1.^(2/3)+XI2.^(2/3)).^(1/2);
+
+end%END FUNCTION
